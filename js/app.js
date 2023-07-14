@@ -85,6 +85,8 @@ function addGameOver() {
   overlay.classList.toggle('hidden');
   inputEl.focus()
   inputEl.value = ''
+  counter = 0
+  score.textContent = counter
   restartGame()
 }
 
