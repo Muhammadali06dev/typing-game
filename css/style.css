@@ -36,10 +36,19 @@ input {
   gap: 100px;
 }
 
+.record-pointer,
 .score,
 .time {
   font-size: 30px;
   margin: 0;
+}
+
+.record-pointer {
+  position: relative;
+  text-align: center;
+  margin: 15px 0 0 0;
+  right: 100px;
+
 }
 
 .modal {
@@ -71,11 +80,24 @@ input {
   margin-bottom: 10px;
 }
 
+.btn-group {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+
+}
+
+#show-table-btn {
+  height: 25px;
+  border-radius: 5px;
+}
+
 #restart-btn {
-  display: block;
-  margin: 15px auto 20px auto;
   width: 50px;
-  height: 20px;
+  height: 25px;
+  order: 1;
+  border-radius: 5px;
 }
 
 .play input {
@@ -141,4 +163,46 @@ input {
   bottom: 20px;
   right: 20px;
   font-weight: 700;
+}
+
+.table__wrapper {
+  width: 100%;
+  max-width: 700px;
+  height: 500px;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px 1px #777777;
+  padding-top: 20px;
+  position: relative;
+  margin: 0 auto;
+  bottom: 250px;
+  z-index: 100;
+  background: white;
+
+}
+
+.table {
+  width: 90%;
+  background: white;
+  border-collapse: collapse;
+  text-align: center;
+  margin: 0 auto;
+
+}
+
+
+td,
+th {
+  border-bottom: 1px solid;
+  padding: 10px 0;
+  font-weight: 600;
+}
+
+.table-btn {
+  display: block;
+  width: 90px;
+  height: 30px;
+  margin: 15px auto 0 auto;
+  border-radius: 5px;
+  margin-top: 40px;
 }

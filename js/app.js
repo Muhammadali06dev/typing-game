@@ -1,16 +1,91 @@
 const randomWord = document.querySelector("#random-word")
 const inputEl = document.querySelector('#user-word')
-const score = document.querySelector('.score span')
+const scoreEl = document.querySelector('.score span')
 const timeEl = document.querySelector(".time span")
 const gameOver = document.querySelector(".game-over")
 const restart = document.querySelector("#restart-btn")
 const overlay = document.querySelector(".overlay")
-const score2 = document.querySelector("#game-over__score span")
+const scoreEl2 = document.querySelector("#game-over__score span")
 const playEl = document.querySelector(".play")
 const playBtn = document.querySelector("#play-btn")
-const userName = document.querySelector("#user-name")
+const userNameEl = document.querySelector("#user-name")
 const countDownEl = document.querySelector(".count-down")
 const userPointer = document.querySelector("#name-pointer")
+const table = document.querySelector(".table__wrapper")
+const tablePlayerEl = document.querySelectorAll(".table-player")
+const tableRecordEl = document.querySelectorAll(".table-record")
+const showTableBtn = document.querySelector("#show-table-btn")
+const hideTableBtn = document.querySelector(".table-btn")
+const recordPointer = document.querySelector(".record-pointer span")
+
+
+let userName
+let players = JSON.parse(localStorage.getItem('data')) ? JSON.parse(localStorage.getItem('data')) : []
+getPlayers()
+// Set players to localStorage
+function setPlayers() {
+  localStorage.setItem("data", JSON.stringify(players))
+}
+
+// Get players from localStorage 
+function getPlayers() {
+  players.forEach((item, i) => {
+    tablePlayerEl[i].textContent = item.player
+    tableRecordEl[i].textContent = item.score
+  })
+
+}
+
+// push player to players 
+function pushPlayer() {
+  let playerChanged = false
+  if (players.length) {
+    players.forEach((item) => {
+      if (item.player == userName && item.score < counter) {
+        item.score = counter
+        playerChanged = true
+      } else if (item.player == userName && item.score > counter) {
+        playerChanged = true
+      }
+    })
+  } else {
+    players.push({
+      player: userName,
+      score: counter
+
+    })
+    playerChanged = true
+  }
+
+  if (playerChanged == false) {
+    players.push({
+      player: userName,
+      score: counter
+    })
+  }
+
+  players.sort((a, b) => b.score - a.score)
+
+}
+
+// record pointer 
+function pointRecord() {
+  let hasRecord = false
+
+  players.forEach((item) => {
+    if (item.player == userName && item.score > counter) {
+      recordPointer.textContent = item.score
+      hasRecord = true
+    } else if (item == userName && item.score < counter) {
+      recordPointer.textContent = counter
+    }
+
+    if (hasRecord = false) {
+      recordPointer.textContent = counter
+    }
+  })
+
+}
 
 playBtn.addEventListener('click', () => {
   playEl.classList.toggle("hidden")
@@ -28,8 +103,9 @@ playBtn.addEventListener('click', () => {
       inputEl.focus()
       restartGame()
       removeGameOver()
-
-      userPointer.textContent = userName.value
+      pointRecord()
+      userName = userNameEl.value
+      userPointer.textContent = userName
     }
 
 
@@ -37,7 +113,6 @@ playBtn.addEventListener('click', () => {
 
 
 })
-
 
 
 let random
@@ -57,9 +132,10 @@ inputEl.addEventListener('input', e => {
     inputEl.value = ''
     changeWord()
     counter++
-    score.textContent = counter
-    score2.textContent = counter
-    time += 4
+    scoreEl.textContent = counter
+    time += 3
+    pointRecord()
+
   }
 })
 
@@ -72,8 +148,16 @@ function restartGame() {
       timeEl.textContent = `${time}s`
     } else {
       clearInterval(timeInterval)
-      gameOver.classList.toggle('hidden');
-      overlay.classList.toggle('hidden');
+      gameOver.classList.remove('hidden');
+      overlay.classList.remove('hidden');
+      scoreEl2.textContent = counter
+
+      // add to localStorage 
+      pushPlayer()
+      setPlayers()
+      getPlayers()
+
+
     }
   }, 1000)
 }
@@ -83,10 +167,11 @@ function restartGame() {
 function addGameOver() {
   gameOver.classList.toggle('hidden');
   overlay.classList.toggle('hidden');
+  table.classList.add('hidden')
   inputEl.focus()
   inputEl.value = ''
   counter = 0
-  score.textContent = counter
+  scoreEl.textContent = counter
   restartGame()
 }
 
@@ -104,3 +189,11 @@ function removeGameOver() {
   })
 }
 
+showTableBtn.addEventListener('click', () => {
+  table.classList.remove("hidden")
+})
+
+
+hideTableBtn.addEventListener("click", () => {
+  table.classList.add('hidden')
+})
